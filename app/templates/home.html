@@ -1,0 +1,10 @@
+{% extends 'base.html' %}{% block content %}
+<h1>Hausmonitor V5.2</h1>
+<div class=grid><a class=card href=/level><h2>Nivellement</h2><b>{{campaigns|length}} Messreihen</b><p>Rohdaten, Fotos und nachträgliche Bearbeitung.</p></a><a class=card href=/cracks><h2>Rissmonitoring</h2><b>{{points|length}} Messstellen</b><p>Messungen, Fotos, Grenzwerte und Bearbeitung.</p></a></div>
+{% if campaigns %}
+{% set last=campaigns[-1] %}
+<div class=kpis><article class=card><span>Aktuelle Änderung</span><strong>{{'%+.3f'|format(last.stats.house.delta) if last.stats.house.delta is not none else '–'}} mm</strong></article><article class=card><span>Komb. Standardfehler</span><strong>{{'%.3f'|format(last.stats.house.se) if last.stats.house.se is not none else '–'}} mm</strong></article><article class=card><span>Signal/Rauschen</span><strong>{{'%.2f'|format(last.stats.house.snr) if last.stats.house.snr is not none else '–'}}</strong></article><article class=card><span>Bewertung</span><strong>{{last.stats.house.quality}}</strong></article></div>
+<section class=card><h2>Änderung mit Messrauschen</h2><p>Die blaue Linie zeigt die Änderung gegenüber der Referenzmessung. Das hellblaue Band zeigt ± einen kombinierten Standardfehler aus SW und SO.</p><svg id=levelNoiseChart viewBox="0 0 900 380" role=img aria-label="Nivellement-Änderung mit Fehlerband"></svg><div class=legend><span class="legend-line blue"></span> Änderung <span class="legend-box"></span> ± Standardfehler</div></section>
+<section class=card><h2>Streuung der Einzelablesungen</h2><p>Standardabweichung der fünf Einzelablesungen je Hausmesspunkt. Hohe Werte weisen auf eine unruhigere Messreihe hin.</p><svg id=levelSdChart viewBox="0 0 900 340" role=img aria-label="Standardabweichung SW und SO"></svg><div class=legend><span class="legend-line green"></span> SD SW <span class="legend-line orange"></span> SD SO</div></section>
+{% endif %}
+{% endblock %}{% block data %}<script>window.NOISE_DATA={{noise_chart|tojson}};</script>{% endblock %}

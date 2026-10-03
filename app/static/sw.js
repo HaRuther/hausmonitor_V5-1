@@ -1,0 +1,1 @@
+const C='hm52';self.addEventListener('install',e=>e.waitUntil(caches.open(C).then(c=>c.addAll(['/','/static/app.css','/static/manifest.webmanifest','/static/icons/icon-192.png']))));self.addEventListener('fetch',e=>{if(e.request.method==='GET')e.respondWith(fetch(e.request).catch(()=>caches.match(e.request)))})
